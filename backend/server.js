@@ -1,24 +1,30 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const authRoutes = require('./routes/auth');
+const taskRoutes = require('./routes/taskRoutes');
 require('dotenv').config();
 
 const app = express();
-const taskRoutes = require('./routes/taskRoutes');
+
 app.use(cors());
 app.use(express.json());
 
-app.use('/api', taskRoutes);
+// Rotas
+app.use('/api/auth', authRoutes); // ✅ Cadastro e login
+app.use('/api', taskRoutes);      // ✅ Tarefas
 
-module.exports = app;
-
+// Página inicial da API
 app.get('/', (req, res) => {
   res.send('API Online');
 });
 
+// Conexão com o banco
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB conectado!');
     app.listen(5000, () => console.log('Servidor rodando na porta 5000'));
   })
   .catch(err => console.error(err));
+
+module.exports = app;
