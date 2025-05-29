@@ -1,0 +1,127 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+/* Fundo da página com imagem */
+.dashboard-background {
+  background: url("../assets/background.png") no-repeat center center/cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container principal centralizado */
+.dashboard-container {
+  background: rgba(255, 255, 255, 0.95); /* fundo branco com transparência */
+  padding: 1rem;
+  max-width: 600px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mantém todo o resto igual ao seu CSS anterior */
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.dashboard-header h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #333;
+}
+.dashboard-header button {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.dashboard-header button:hover {
+  background: #c0392b;
+}
+
+.task-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.task-form input,
+.task-form select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.task-form input {
+  flex: 1;
+}
+.task-form button {
+  background: #2980b9;
+  color: #fff;
+  border: none;
+  padding: 0 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.task-form button:hover {
+  background: #1c5980;
+}
+
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.tasks-list .task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ececec;
+}
+.tasks-list .task-item:last-child {
+  border-bottom: none;
+}
+.tasks-list .task-item .title {
+  flex: 1;
+  color: #333;
+}
+.tasks-list .task-item.completed .title {
+  text-decoration: line-through;
+  color: #999;
+}
+.tasks-list .task-item button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  color: #e74c3c;
+}
+.tasks-list .task-item button.toggle {
+  color: #27ae60;
+}
+
+.no-tasks {
+  text-align: center;
+  color: #777;
+  margin-top: 2rem;
+}
+
+.task-item.dragging {
+  background: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}

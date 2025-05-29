@@ -1,0 +1,103 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+}
+
+.login-illustration {
+  flex: 1.5;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-illustration img {
+  width: 80%;
+  max-width: 1000px;
+}
+
+.login-form {
+  flex: 1;
+  background: #3f6fd9;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 55px;
+}
+
+.login-form h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.login-form p {
+  margin-bottom: 20px;
+}
+
+.login-form p a {
+  color: #d0d8f0;
+  text-decoration: underline;
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  margin-top: 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-form input[type="text"]::placeholder,
+.login-form input[type="password"]::placeholder {
+  color: #a0a8c0;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px;
+}
+
+.login-options label {
+  font-size: 0.9rem;
+}
+
+.login-options a {
+  color: #d0d8f0;
+  font-size: 0.9rem;
+}
+
+.login-form button {
+  background: #1f4bd1;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-form button:hover {
+  background: #153ab0;
+}

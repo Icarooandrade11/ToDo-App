@@ -1,0 +1,108 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+}
+
+.login-illustration {
+  flex: 1.5;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-illustration img {
+  width: 80%;
+  max-width: 1000px;
+}
+
+.register-container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fa;
+}
+
+.register-form {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.register-form h2 {
+  margin-bottom: 20px;
+  font-size: 1.75rem;
+  color: #333;
+  text-align: center;
+}
+
+.register-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-form label {
+  margin-top: 12px;
+  font-weight: bold;
+  color: #555;
+}
+
+.register-form input {
+  margin-top: 6px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.register-form input::placeholder {
+  color: #999;
+}
+
+.register-form button {
+  margin-top: 24px;
+  background: #153ab0;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.register-form button:hover {
+  background: #2047c7;
+}
+
+.register-form .error {
+  margin-top: 12px;
+  color: #c0392b;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.register-form .back-login {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.register-form .back-login button {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
