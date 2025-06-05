@@ -1,0 +1,100 @@
+/* src/Dashboard.css */
+.dashboard-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.dashboard-container h2 {
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.new-task-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.new-task-form input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.new-task-form button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.new-task-form button:hover {
+  background-color: #0056b3;
+}
+
+.task-list {
+  margin-top: 20px;
+  text-align: left; /* Alinha o texto das tarefas à esquerda */
+}
+
+.task-list p {
+  color: #666;
+  font-style: italic;
+}
+
+.task-card {
+  padding: 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.task-card p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.dashboard-links {
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+.dashboard-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.dashboard-links a:hover {
+  text-decoration: underline;
+}
+
+.logout-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #dc3545; /* Vermelho para o botão de sair */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}

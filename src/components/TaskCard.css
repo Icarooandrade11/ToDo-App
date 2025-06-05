@@ -1,0 +1,17 @@
+/* src/components/TaskCard.css */
+.task-card {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-card p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
