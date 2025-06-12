@@ -1,14 +1,14 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "description": "Backend do aplicativo ToDo com autenticação",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Ícaro",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -16,5 +16,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.14.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
   }
 }

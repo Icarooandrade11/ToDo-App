@@ -64,7 +64,7 @@ function Dashboard() {
       <div className="task-list">
         {tarefas.length > 0 ? (
           tarefas.map((tarefa) => (
-            <TaskCard key={tarefa.id} titulo={tarefa.titulo} /> // Pode expandir TaskCard para editar/excluir
+            <TaskCard key={tarefa._id} titulo={tarefa.title} /> // Pode expandir TaskCard para editar/excluir
           ))
         ) : (
           <p>Nenhuma tarefa adicionada ainda.</p>
