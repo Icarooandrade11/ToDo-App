@@ -1,82 +1,50 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../services/api.js'; // Importa a instância do Axios com o interceptor
+import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
+export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // Hook para navegação programática
+  const navigate = useNavigate();
 
-  // Função para fazer login
-  const login = async (email, senha) => {
-    try {
-      const response = await api.post('/auth/login', { email, senha });
-      localStorage.setItem('token', response.data.token);
-      setUser(response.data.user); // Supondo que o backend retorna o objeto do usuário
-      navigate('/dashboard'); // Redireciona para o dashboard após login
-      return true;
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      alert('Login inválido. Verifique seus dados.');
-      return false;
-    }
-  };
-
-  // Função para fazer logout
-  const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
-    navigate('/login'); // Redireciona para a página de login
-  };
-
-  // Função para registrar um novo usuário
-  const register = async (nome, email, senha) => {
-    try {
-      const response = await api.post('/auth/register', { nome, email, senha });
-      // Após o registro, podemos fazer login automaticamente ou redirecionar para o login
-      alert('Cadastro realizado com sucesso! Faça login para continuar.');
-      navigate('/login');
-      return true;
-    } catch (error) {
-      console.error('Erro ao registrar:', error);
-      alert('Erro no cadastro. Tente novamente.');
-      return false;
-    }
-  };
-
-  // Função para buscar os dados do usuário autenticado (persistência de sessão)
-  const fetchUser = async () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const response = await api.get('/auth/me'); // Endpoint para verificar o token e retornar o usuário
-        setUser(response.data.user);
-      } catch (error) {
-        console.error('Erro ao buscar usuário autenticado:', error);
-        localStorage.removeItem('token'); // Token inválido ou expirado
-        setUser(null);
-        navigate('/login'); // Força o login novamente
-      }
-    }
-    setLoading(false); // Finaliza o carregamento
-  };
-
-  // Executa fetchUser() quando o componente é montado
+  // tenta restaurar sessão
   useEffect(() => {
-    fetchUser();
-  }, []); // O array vazio garante que ele roda apenas uma vez ao montar
+    const token = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
+    if (token && storedUser) {
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
+      setUser(JSON.parse(storedUser));
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
-  if (loading) {
-    return <div>Carregando...</div>; // Ou um spinner de carregamento
-  }
+  const login = async (email, senha) => {
+    const { data } = await api.post('/auth/login', { email, password: senha });
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+    setUser(data.user);
+    navigate('/dashboard');
+  };
+
+  const register = async (name, email, senha) => {
+    await api.post('/auth/register', { name, email, password: senha });
+    alert('Cadastro feito! Faça login.');
+    navigate('/login');
+  };
+
+  const logout = () => {
+    localStorage.clear();
+    setUser(null);
+    delete api.defaults.headers.common.Authorization;
+    navigate('/login');
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => useContext(AuthContext);
+}

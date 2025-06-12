@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api.js'; // Importa a instância da API com o interceptor
 import TaskCard from '../components/TaskCard.js';
 import { useAuth } from '../contexts/AuthContext.jsx'; // Para usar a função de logout
-import '../Dashboard.css'; // Importa o CSS específico para o dashboard
+import './Dashboard.css'; // Importa o CSS específico para o dashboard
 
 function Dashboard() {
   const [tarefas, setTarefas] = useState([]);
@@ -14,7 +14,7 @@ function Dashboard() {
     // e o interceptor da API adiciona o token automaticamente.
     const fetchTarefas = async () => {
       try {
-        const res = await api.get('/tarefas'); // Usa a instância 'api'
+        const res = await api.get('/tasks'); // Usa a instância 'api'
         setTarefas(res.data);
       } catch (err) {
         console.error('Erro ao carregar tarefas:', err);
@@ -30,8 +30,8 @@ function Dashboard() {
     if (!novaTarefa.trim()) return;
 
     try {
-      const res = await api.post('/tarefas', {
-        titulo: novaTarefa,
+      const res = await api.post('/tasks', {
+        title: novaTarefa,
         // Adicione outros campos se seu backend espera (ex: 'publico': false)
       });
       setTarefas([...tarefas, res.data]);

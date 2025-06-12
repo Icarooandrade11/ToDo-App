@@ -1,5 +1,10 @@
 const Task = require('../models/Task');
 
+exports.getPublicTasks = async (req, res) => {
+  const tasks = await Task.find({ public: true }).sort({ createdAt: -1 });
+  res.json(tasks);
+};
+
 exports.createTask = async (req, res) => {
   try {
     const { title } = req.body;

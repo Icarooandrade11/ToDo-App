@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../services/api.js'; // Usamos a instância da API diretamente aqui
 import { useNavigate } from 'react-router-dom';
-import '../ForgotPassword.css'; // Criar este CSS se for estilizar
+import './ForgotPassword.css'; // Criar este CSS se for estilizar
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx'; // Importa o hook do AuthContext
-import '../Login.css'; // Importa o CSS específico para o login
+import './Login.css'; // Importa o CSS específico para o login
 
 function Login() {
   const [email, setEmail] = useState('');

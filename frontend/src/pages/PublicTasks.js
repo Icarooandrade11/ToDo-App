@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api.js'; // Importa a instância da API
 import TaskCard from '../components/TaskCard.js';
-import '../PublicTasks.css'; // Criar este CSS se for estilizar
+import './PublicTasks.css'; // Criar este CSS se for estilizar
 
 function PublicTasks() {
   const [tarefasPublicas, setTarefasPublicas] = useState([]);
@@ -9,7 +9,7 @@ function PublicTasks() {
   useEffect(() => {
     const fetchPublicTasks = async () => {
       try {
-        const res = await api.get('/publicas'); // Usa a instância 'api'
+        const res = await api.get('/tasks/public'); // Usa a instância 'api'
         setTarefasPublicas(res.data);
       } catch (err) {
         console.error('Erro ao carregar tarefas públicas:', err);

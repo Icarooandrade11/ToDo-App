@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Rotas
 app.use('/api/auth', authRoutes); // ✅ Cadastro e login
-app.use('/api', taskRoutes);      // ✅ Tarefas
+app.use('/api/tasks', taskRoutes);      // ✅ Tarefas
 
 // Página inicial da API
 app.get('/', (req, res) => {

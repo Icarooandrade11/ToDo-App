@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx'; // Importa o hook do AuthContext
-import '../Register.css'; // Importa o CSS específico para o registro
+import './Register.css'; // Importa o CSS específico para o registro
 
 function Register() {
   const [nome, setNome] = useState('');
