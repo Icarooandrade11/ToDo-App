@@ -1,0 +1,141 @@
+.dashboard-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.dashboard-container h2 {
+  color: #333;
+  margin-bottom: 25px;
+}
+
+/* Novo estilo para o formulário de adicionar/editar */
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.task-form input[type="text"],
+.task-form textarea {
+  width: calc(100% - 20px); /* Ajuste para padding */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Para incluir padding na largura */
+}
+
+.task-form textarea {
+  resize: vertical; /* Permite redimensionar verticalmente */
+  min-height: 60px;
+}
+
+.task-form .form-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-form .form-group label {
+  font-size: 0.95rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.task-form .form-group input[type="checkbox"],
+.task-form .form-group input[type="date"] {
+  width: auto; /* Checkbox e input date não devem ter 100% */
+  margin: 0; /* Remove margem padrão do input */
+  padding: 5px;
+}
+
+.task-form button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.task-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilos para os botões de filtro */
+.filter-buttons {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.filter-buttons button {
+  padding: 8px 15px;
+  background-color: #e9ecef;
+  color: #333;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.filter-buttons button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.filter-buttons button:hover:not(.active) {
+  background-color: #dee2e6;
+}
+
+.task-list {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.task-list p {
+  color: #666;
+  font-style: italic;
+}
+
+.dashboard-links {
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+.dashboard-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.dashboard-links a:hover {
+  text-decoration: underline;
+}
+
+.logout-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
