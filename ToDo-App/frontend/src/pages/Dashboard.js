@@ -1,65 +1,105 @@
-import React, { useEffect, useState, useCallback } from 'react'; // Adicione useCallback
+import React, { useEffect, useState, useCallback } from 'react';
 import api from '../services/api.js';
 import TaskCard from '../components/TaskCard.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
-import './Dashboard.css';
+import './Dashboard.css'; // Certifique-se que o caminho está correto
 
 function Dashboard() {
   const [tarefas, setTarefas] = useState([]);
-  const [novaTarefa, setNovaTarefa] = useState(''); // Para o título da nova tarefa
-  const [novaDescricao, setNovaDescricao] = useState(''); // Novo: para descrição
-  const [novaPublico, setNovaPublico] = useState(false); // Novo: para privacidade
-  const [novoPrazo, setNovoPrazo] = useState(''); // Novo: para prazo
-  const [filtroStatus, setFiltroStatus] = useState('todos'); // Novo: para o filtro
-  const [currentEditingTask, setCurrentEditingTask] = useState(null); // Novo: para estado de edição
+  const [novaTarefa, setNovaTarefa] = useState('');
+  const [novaDescricao, setNovaDescricao] = useState('');
+  const [novaPublico, setNovaPublico] = useState(false);
+  const [novoPrazo, setNovoPrazo] = useState('');
+  const [filtroStatus, setFiltroStatus] = useState('todos');
+  const [currentEditingTask, setCurrentEditingTask] = useState(null); // Armazena a tarefa sendo editada
 
   const { user, logout } = useAuth();
-  const token = localStorage.getItem('token');
+  // Não precisamos mais do 'token' diretamente aqui, o interceptor do 'api.js' já cuida disso.
+  // const token = localStorage.getItem('token'); // Pode remover esta linha
 
-  // Função para buscar tarefas (usada no useEffect e após certas operações)
+  // Função para buscar tarefas - usa useCallback para evitar recriação desnecessária
   const fetchTarefas = useCallback(async () => {
-    if (!token) {
-      logout();
-      return;
-    }
     try {
+      
       const res = await api.get('/api/tasks');
       setTarefas(res.data);
     } catch (err) {
-      console.error('Erro ao carregar tarefas:', err);
-      // alert('Erro ao carregar tarefas. Por favor, faça login novamente.'); // Remova ou refine este alert
-      logout(); // Força o logout se houver erro de autenticação na busca
+      console.error('Erro ao carregar tarefas:', err.response ? err.response.data : err.message);
+      // Se for um erro de autenticação (401/403), força o logout
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+        alert('Sua sessão expirou ou você não tem permissão. Por favor, faça login novamente.');
+        logout();
+      } else {
+        alert('Erro ao carregar tarefas.');
+      }
     }
-  }, [logout, token]);
+  }, [logout]); // Dependência: logout (para garantir que a função está atualizada)
 
+  // useEffect para carregar tarefas na montagem do componente
   useEffect(() => {
     fetchTarefas();
-  }, [fetchTarefas]); // fetchTarefas como dependência para garantir que roda quando a função muda
+  }, [fetchTarefas]); // Dependência: fetchTarefas
 
   // --- Função para alternar status (concluído/pendente) ---
   const handleToggleStatus = async (id) => {
     try {
-      const tarefaAtual = tarefas.find(t => t.id === id || t._id === id); // Usa id ou _id
-      if (!tarefaAtual) return;
+      const tarefaAtual = tarefas.find(t => t.id === id || t._id === id);
+      if (!tarefaAtual) {
+        console.warn('Tarefa não encontrada para alternar status:', id);
+        return;
+      }
 
+    
       const res = await api.put(`/api/tasks/${id || tarefaAtual._id}`, {
-        concluida: !tarefaAtual.concluida // Alterna o status
+        concluida: !tarefaAtual.concluida
       });
 
       // Atualiza o estado local para refletir a mudança
-      setTarefas(tarefas.map(t =>
+      setTarefas(prevTarefas => prevTarefas.map(t =>
         (t.id === id || t._id === id) ? res.data : t
       ));
     } catch (error) {
-      console.error('Erro ao alternar status da tarefa:', error);
+      console.error('Erro ao alternar status da tarefa:', error.response ? error.response.data : error.message);
       alert('Erro ao alternar status da tarefa.');
     }
   };
 
+  // --- Função para iniciar edição ---
+  const handleEditClick = (tarefa) => {
+    setCurrentEditingTask(tarefa);
+    setNovaTarefa(tarefa.titulo);
+    setNovaDescricao(tarefa.descricao || ''); // Garante que seja string, mesmo se nulo
+    setNovaPublico(tarefa.publico || false);
+    // Formata a data para 'YYYY-MM-DD' para o input type="date"
+    setNovoPrazo(tarefa.prazo ? new Date(tarefa.prazo).toISOString().split('T')[0] : '');
+  };
+
+  // --- Função para excluir tarefa ---
+  const handleDeleteTask = async (id) => {
+    if (!window.confirm('Tem certeza que deseja excluir esta tarefa?')) {
+      return; // Cancela se o usuário não confirmar
+    }
+
+    try {
+      await api.delete(`/api/tasks/${id}`);
+
+      // Remove a tarefa do estado local
+      setTarefas(prevTarefas => prevTarefas.filter(t => (t.id !== id && t._id !== id)));
+      alert('Tarefa excluída com sucesso!');
+    } catch (error) {
+      console.error('Erro ao excluir tarefa:', error.response ? error.response.data : error.message);
+      alert('Erro ao excluir tarefa.');
+    }
+  };
+
+
   // --- Função para adicionar/editar tarefa (handleSaveTask) ---
   const handleSaveTask = async (e) => {
     e.preventDefault();
-    if (!novaTarefa.trim()) return; // Validação mínima para o título
+    if (!novaTarefa.trim()) {
+      alert('O título da tarefa é obrigatório!');
+      return;
+    }
 
     const taskData = {
       titulo: novaTarefa,
@@ -71,12 +111,14 @@ function Dashboard() {
     try {
       let res;
       if (currentEditingTask) { // Se estiver editando
+      
         res = await api.put(`/api/tasks/${currentEditingTask.id || currentEditingTask._id}`, taskData);
-        setTarefas(tarefas.map(t =>
+        setTarefas(prevTarefas => prevTarefas.map(t =>
           (t.id === (currentEditingTask.id || currentEditingTask._id)) ? res.data : t
         ));
         setCurrentEditingTask(null); // Sai do modo de edição
       } else { // Se estiver adicionando
+        // Endpoint correto: /api/tasks (conforme verificado no backend server.js)
         res = await api.post('/api/tasks', taskData);
         setTarefas((prevTarefas) => [...prevTarefas, res.data]);
       }
@@ -86,17 +128,12 @@ function Dashboard() {
       setNovaDescricao('');
       setNovaPublico(false);
       setNovoPrazo('');
+      alert(`Tarefa ${currentEditingTask ? 'editada' : 'adicionada'} com sucesso!`);
     } catch (error) {
-      console.error('Erro ao salvar tarefa:', error);
-      alert('Erro ao salvar tarefa.');
+      console.error('Erro ao salvar tarefa:', error.response ? error.response.data : error.message);
+      alert(`Erro ao ${currentEditingTask ? 'editar' : 'adicionar'} tarefa.`);
     }
   };
-
-  // --- Função para excluir tarefa (handleDeleteTask) --- (Próxima Seção)
-  // ...
-
-  // --- Função para iniciar edição (handleEditClick) --- (Próxima Seção)
-  // ...
 
   // --- Filtragem de tarefas (Frontend) ---
   const tarefasFiltradas = tarefas.filter(tarefa => {
@@ -115,7 +152,7 @@ function Dashboard() {
       <h2>Olá, {user?.name || 'Usuário'}! Suas Tarefas</h2>
 
       {/* --- Formulário de Nova Tarefa / Edição --- */}
-      <form onSubmit={handleSaveTask} className="task-form"> {/* Alterado de new-task-form */}
+      <form onSubmit={handleSaveTask} className="task-form">
         <input
           type="text"
           placeholder="Título da tarefa"
@@ -127,7 +164,7 @@ function Dashboard() {
           placeholder="Descrição (opcional)"
           value={novaDescricao}
           onChange={(e) => setNovaDescricao(e.target.value)}
-          rows="3" // Adicionado para melhor visualização
+          rows="3"
         ></textarea>
         <div className="form-group">
           <label>
@@ -187,10 +224,11 @@ function Dashboard() {
         {tarefasFiltradas.length > 0 ? (
           tarefasFiltradas.map((tarefa) => (
             <TaskCard
-              key={tarefa.id || tarefa._id} // Usa id ou _id (MongoDB) para a key
+              key={tarefa.id || tarefa._id}
               tarefa={tarefa} // Passa o objeto completo da tarefa
               onToggleStatus={handleToggleStatus}
-              // onEdit e onDelete serão passados em próximas seções
+              onEdit={handleEditClick} // Passa a função para editar
+              onDelete={handleDeleteTask} // Passa a função para excluir
             />
           ))
         ) : (

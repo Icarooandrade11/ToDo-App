@@ -1,34 +1,48 @@
 import React from 'react';
-import './TaskCard.css'; 
+import './TaskCard.css';
 
-// Recebe a tarefa completa e uma função para alternar o status
-function TaskCard({ tarefa, onToggleStatus }) {
-  // Adicione uma classe CSS 'completed' se a tarefa estiver concluída
+// Recebe a tarefa completa e as funções de callback
+// Define valores padrão para as funções de callback, caso não sejam passadas
+function TaskCard({ tarefa, onToggleStatus, onEdit, onDelete }) {
   const cardClassName = `task-card ${tarefa.concluida ? 'completed' : ''}`;
 
   return (
     <div className={cardClassName}>
       <div className="task-content">
-        {/* Checkbox para marcar como concluído/pendente */}
-        <input
-          type="checkbox"
-          checked={tarefa.concluida}
-          onChange={() => onToggleStatus(tarefa.id)} // Chama a função passada pelo pai
-        />
-        <p className="task-title">{tarefa.titulo}</p>
-        {tarefa.descricao && ( // Mostra descrição se existir
-          <p className="task-description">{tarefa.descricao}</p>
+        {/* Checkbox para marcar como concluído/pendente - só aparece se onToggleStatus for passado */}
+        {onToggleStatus && (
+          <input
+            type="checkbox"
+            checked={tarefa.concluida}
+            onChange={() => onToggleStatus(tarefa.id || tarefa._id)}
+          />
         )}
-        {tarefa.prazo && ( // Mostra prazo se existir
-          <p className="task-deadline">Prazo: {new Date(tarefa.prazo).toLocaleDateString()}</p>
-        )}
-        {tarefa.publico ? ( // Mostra ícone de privacidade
-          <span className="task-privacy">🌐 Público</span>
-        ) : (
-          <span className="task-privacy">🔒 Privado</span>
-        )}
+        <div>
+          <p className="task-title">{tarefa.titulo}</p>
+          {tarefa.descricao && (
+            <p className="task-description">{tarefa.descricao}</p>
+          )}
+          {tarefa.prazo && (
+            <p className="task-deadline">Prazo: {new Date(tarefa.prazo).toLocaleDateString('pt-BR')}</p>
+          )}
+          {tarefa.publico ? (
+            <span className="task-privacy">🌐 Público</span>
+          ) : (
+            <span className="task-privacy">🔒 Privado</span>
+          )}
+        </div>
       </div>
-      {/* Botões de Ação serão adicionados em próximas seções */}
+      {/* Botões de Ação - só aparecem se onEdit ou onDelete forem passados */}
+      {(onEdit || onDelete) && (
+        <div className="task-actions">
+          {onEdit && (
+            <button onClick={() => onEdit(tarefa)} className="edit-button">Editar</button>
+          )}
+          {onDelete && (
+            <button onClick={() => onDelete(tarefa.id || tarefa._id)} className="delete-button">Excluir</button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
