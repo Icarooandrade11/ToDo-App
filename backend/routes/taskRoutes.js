@@ -5,6 +5,8 @@ const auth = require('../middleware/auth');
 
 router.use(auth);
 
+router.get('/export/pdf', taskController.exportPDF);
+router.get('/export/csv', taskController.exportCSV);
 router.get('/public', taskController.getPublicTasks);
 router.get('/', taskController.getTasks);
 router.post('/', taskController.createTask);
