@@ -1,0 +1,56 @@
+/* src/Register.css */
+.register-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.register-container h2 {
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.register-container input {
+  display: block;
+  width: calc(100% - 20px); /* Ajuste para padding */
+  padding: 12px 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.register-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745; /* Uma cor verde para registro */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-container button:hover {
+  background-color: #218838;
+}
+
+.register-links {
+  margin-top: 20px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.register-links a {
+  color: #28a745;
+  text-decoration: none;
+}
+
+.register-links a:hover {
+  text-decoration: underline;
+}
