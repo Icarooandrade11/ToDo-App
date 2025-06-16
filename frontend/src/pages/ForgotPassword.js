@@ -10,18 +10,17 @@ function ForgotPassword() {
   const navigate = useNavigate();
 
   const handleForgotPassword = async (e) => {
-    e.preventDefault();
-    setMessage('');
-    setError('');
-    try {
-      // Endpoint que seu backend deve ter para solicitar redefinição de senha
-      await api.post('/auth/forgot-password', { email });
-      setMessage('Se as credenciais estiverem corretas, você receberá um e-mail com instruções para redefinir sua senha.');
-    } catch (err) {
-      console.error('Erro ao solicitar redefinição de senha:', err);
-      setError('Ocorreu um erro. Por favor, tente novamente.');
-    }
-  };
+  e.preventDefault();
+  setMessage('');
+  setError('');
+  try {
+    await api.post('/auth/forgot-password', { email });
+    setMessage('Se as credenciais estiverem corretas, você receberá um e‑mail com instruções para redefinir sua senha.');
+  } catch (err) {
+    console.error('Erro ao solicitar redefinição de senha:', err);
+    setError('Ocorreu um erro. Por favor, tente novamente.');
+  }
+};
 
   return (
     <div className="forgot-password-container">

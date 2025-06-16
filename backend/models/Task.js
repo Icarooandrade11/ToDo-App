@@ -24,6 +24,7 @@ const taskSchema = new mongoose.Schema({
     type: Date,
     default: null
   }
+  
 });
 
 module.exports = mongoose.model('Task', taskSchema);

@@ -1,50 +1,38 @@
 import React from 'react';
 import './TaskCard.css';
 
-// Recebe a tarefa completa e as funções de callback
-// Define valores padrão para as funções de callback, caso não sejam passadas
-function TaskCard({ tarefa, onToggleStatus, onEdit, onDelete }) {
-  const cardClassName = `task-card ${tarefa.concluida ? 'completed' : ''}`;
+export default function TaskCard({ tarefa, onToggleStatus, onEdit, onDelete }) {
+  // Usa completed, title, description, deadline, public
+  const { _id, completed, title, description, deadline, public: isPublic } = tarefa;
+  const taskId = _id;
 
   return (
-    <div className={cardClassName}>
+    <div className={`task-card ${completed ? 'completed' : ''}`}>
       <div className="task-content">
-        {/* Checkbox para marcar como concluído/pendente - só aparece se onToggleStatus for passado */}
         {onToggleStatus && (
           <input
             type="checkbox"
-            checked={tarefa.concluida}
-            onChange={() => onToggleStatus(tarefa.id || tarefa._id)}
+            checked={completed}
+            onChange={() => onToggleStatus(taskId)}
           />
         )}
-        <div>
-          <p className="task-title">{tarefa.titulo}</p>
-          {tarefa.descricao && (
-            <p className="task-description">{tarefa.descricao}</p>
+        <div className="task-texts">
+          <p className="task-title">{title}</p>
+          {description && <p className="task-description">{description}</p>}
+          {deadline && (
+            <p className="task-deadline">
+              Prazo: {new Date(deadline).toLocaleDateString('pt-BR')}
+            </p>
           )}
-          {tarefa.prazo && (
-            <p className="task-deadline">Prazo: {new Date(tarefa.prazo).toLocaleDateString('pt-BR')}</p>
-          )}
-          {tarefa.publico ? (
-            <span className="task-privacy">🌐 Público</span>
-          ) : (
-            <span className="task-privacy">🔒 Privado</span>
-          )}
+          {isPublic && <span className="task-privacy">🌐 Público</span>}
         </div>
       </div>
-      {/* Botões de Ação - só aparecem se onEdit ou onDelete forem passados */}
       {(onEdit || onDelete) && (
         <div className="task-actions">
-          {onEdit && (
-            <button onClick={() => onEdit(tarefa)} className="edit-button">Editar</button>
-          )}
-          {onDelete && (
-            <button onClick={() => onDelete(tarefa.id || tarefa._id)} className="delete-button">Excluir</button>
-          )}
+          {onEdit  && <button onClick={() => onEdit(tarefa)}>Editar</button>}
+          {onDelete && <button onClick={() => onDelete(taskId)}>Excluir</button>}
         </div>
       )}
     </div>
   );
 }
-
-export default TaskCard;

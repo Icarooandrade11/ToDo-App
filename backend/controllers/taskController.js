@@ -31,6 +31,7 @@ exports.createTask = async (req, res) => {
 };
 
 exports.getTasks = async (req, res) => {
+    
   try {
     const { status } = req.query;
     let filter = { user: req.user.id };

@@ -2,7 +2,7 @@
   "name": "meu-todo-front",
   "version": "0.1.0",
   "private": true,
-   "type": "module",
+  "type": "module",
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
     "@testing-library/dom": "^10.4.0",

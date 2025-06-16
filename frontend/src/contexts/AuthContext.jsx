@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       try {
         // Usa o endpoint do backend para verificar o token e retornar o usuário
-        const response = await api.get('/api/auth/me'); // CORRIGIDO: endpoint com '/api/auth/me'
+        const response = await api.get('/auth/me'); // removendo /api na frente: baseURL já é http://…/api
         setUser(response.data.user);
       } catch (error) {
         console.error('Erro ao buscar usuário autenticado:', error);
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, senha) => {
     try {
      
-      const { data } = await api.post('/api/auth/login', { email, password: senha });
+      const { data } = await api.post('/auth/login', { email, password: senha });
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user)); // Armazena o objeto completo do user
       // api.defaults.headers.common.Authorization = `Bearer ${data.token}`; // REMOVIDO: Interceptor em api.js já faz isso
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, senha) => {
     try {
     
-      await api.post('/api/auth/register', { name, email, password: senha });
+      await api.post('/auth/register', { name, email, password: senha });
       alert('Cadastro feito! Faça login.');
       navigate('/login'); // Redireciona para login após cadastro com sucesso
     } catch (error) {

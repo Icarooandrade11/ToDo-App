@@ -21,7 +21,7 @@ function Dashboard() {
   const fetchTarefas = useCallback(async () => {
     try {
       
-      const res = await api.get('/api/tasks');
+      const res = await api.get('/tasks');
       setTarefas(res.data);
     } catch (err) {
       console.error('Erro ao carregar tarefas:', err.response ? err.response.data : err.message);
@@ -43,35 +43,36 @@ function Dashboard() {
   // --- Função para alternar status (concluído/pendente) ---
   const handleToggleStatus = async (id) => {
     try {
-      const tarefaAtual = tarefas.find(t => t.id === id || t._id === id);
-      if (!tarefaAtual) {
-        console.warn('Tarefa não encontrada para alternar status:', id);
-        return;
-      }
+      // Busca a tarefa atual no state
+      const tarefaAtual = tarefas.find(t => t._id === id);
+      if (!tarefaAtual) return;
 
-    
-      const res = await api.put(`/api/tasks/${id || tarefaAtual._id}`, {
-        concluida: !tarefaAtual.concluida
+      // Envia o toggle para o backend
+      const res = await api.put(`/tasks/${id}`, {
+        // o backend espera o campo 'completed'
+        completed: !tarefaAtual.completed
       });
 
-      // Atualiza o estado local para refletir a mudança
-      setTarefas(prevTarefas => prevTarefas.map(t =>
-        (t.id === id || t._id === id) ? res.data : t
-      ));
-    } catch (error) {
-      console.error('Erro ao alternar status da tarefa:', error.response ? error.response.data : error.message);
-      alert('Erro ao alternar status da tarefa.');
+      // Atualiza o state local
+      setTarefas(prev =>
+        prev.map(t => (t._id === id ? res.data : t))
+      );
+
+      // ➡️ aqui: muda automaticamente o filtro para "concluídos"
+      setFiltroStatus('concluidos');
+    } catch (err) {
+      console.error('Erro ao alternar status:', err.response?.data || err);
+      alert('Não foi possível alternar o status.');
     }
   };
-
   // --- Função para iniciar edição ---
   const handleEditClick = (tarefa) => {
     setCurrentEditingTask(tarefa);
-    setNovaTarefa(tarefa.titulo);
-    setNovaDescricao(tarefa.descricao || ''); // Garante que seja string, mesmo se nulo
-    setNovaPublico(tarefa.publico || false);
+    setNovaTarefa(tarefa.title);
+    setNovaDescricao(tarefa.description || ''); // Garante que seja string, mesmo se nulo
+    setNovaPublico(tarefa.public || false);
     // Formata a data para 'YYYY-MM-DD' para o input type="date"
-    setNovoPrazo(tarefa.prazo ? new Date(tarefa.prazo).toISOString().split('T')[0] : '');
+    setNovoPrazo(tarefa.deadline ? new Date(tarefa.deadline).toISOString().split('T')[0] : '');
   };
 
   // --- Função para excluir tarefa ---
@@ -81,7 +82,7 @@ function Dashboard() {
     }
 
     try {
-      await api.delete(`/api/tasks/${id}`);
+      await api.delete(`/tasks/${id}`);
 
       // Remove a tarefa do estado local
       setTarefas(prevTarefas => prevTarefas.filter(t => (t.id !== id && t._id !== id)));
@@ -102,24 +103,24 @@ function Dashboard() {
     }
 
     const taskData = {
-      titulo: novaTarefa,
-      descricao: novaDescricao,
-      publico: novaPublico,
-      prazo: novoPrazo ? new Date(novoPrazo) : null // Converte para Date
+      title: novaTarefa,
+      description: novaDescricao,
+      public: novaPublico,
+      deadline: novoPrazo ? new Date(novoPrazo) : null // Converte para Date
     };
 
     try {
       let res;
       if (currentEditingTask) { // Se estiver editando
       
-        res = await api.put(`/api/tasks/${currentEditingTask.id || currentEditingTask._id}`, taskData);
+        res = await api.put(`/tasks/${currentEditingTask.id || currentEditingTask._id}`, taskData);
         setTarefas(prevTarefas => prevTarefas.map(t =>
           (t.id === (currentEditingTask.id || currentEditingTask._id)) ? res.data : t
         ));
         setCurrentEditingTask(null); // Sai do modo de edição
       } else { // Se estiver adicionando
-        // Endpoint correto: /api/tasks (conforme verificado no backend server.js)
-        res = await api.post('/api/tasks', taskData);
+        // Endpoint correto: /tasks (conforme verificado no backend server.js)
+        res = await api.post('/tasks', taskData);
         setTarefas((prevTarefas) => [...prevTarefas, res.data]);
       }
 
@@ -136,10 +137,10 @@ function Dashboard() {
   };
 
   // --- Filtragem de tarefas (Frontend) ---
-  const tarefasFiltradas = tarefas.filter(tarefa => {
-    if (filtroStatus === 'todos') return true;
-    if (filtroStatus === 'pendentes') return !tarefa.concluida;
-    if (filtroStatus === 'concluidos') return tarefa.concluida;
+  const tarefasFiltradas = tarefas.filter(t => {
+    if (filtroStatus === 'todos')      return true;
+    if (filtroStatus === 'pendentes')  return !t.completed;
+    if (filtroStatus === 'concluidos') return t.completed;
     return true;
   });
 
@@ -200,23 +201,25 @@ function Dashboard() {
       {/* --- Filtro por Status --- */}
       <div className="filter-buttons">
         <button
-          className={filtroStatus === 'todos' ? 'active' : ''}
-          onClick={() => setFiltroStatus('todos')}
-        >
-          Todos
-        </button>
-        <button
-          className={filtroStatus === 'pendentes' ? 'active' : ''}
-          onClick={() => setFiltroStatus('pendentes')}
-        >
-          Pendentes
-        </button>
-        <button
-          className={filtroStatus === 'concluidos' ? 'active' : ''}
-          onClick={() => setFiltroStatus('concluidos')}
-        >
-          Concluídos
-        </button>
+
+        className={filtroStatus === 'todos' ? 'active' : ''}
+        onClick={() => setFiltroStatus('todos')}
+      >
+        Todos
+      </button>
+      <button
+        className={filtroStatus === 'pendentes' ? 'active' : ''}
+        onClick={() => setFiltroStatus('pendentes')}
+      >
+        Pendentes
+      </button>
+      <button
+        className={filtroStatus === 'concluidos' ? 'active' : ''}
+        onClick={() => setFiltroStatus('concluidos')}
+      >
+        Concluídos
+      </button>
+
       </div>
 
       {/* --- Lista de Tarefas --- */}
