@@ -1,0 +1,77 @@
+.task-card {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between; /* Para espaçar conteúdo e botões */
+  align-items: flex-start; /* Alinha no topo */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease; /* Para transições visuais */
+}
+
+/* Estilo para tarefa concluída */
+.task-card.completed {
+  background-color: #e6ffe6; /* Fundo verde claro */
+  border-left: 5px solid #28a745; /* Barra verde na esquerda */
+  opacity: 0.8;
+}
+
+.task-card.completed .task-title {
+  text-decoration: line-through; /* Riscar o texto */
+  color: #6c757d; /* Cor mais esmaecida */
+}
+
+.task-card .task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Espaço entre título, descrição, etc. */
+  flex-grow: 1; /* Ocupa espaço disponível */
+}
+
+.task-card .task-title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.task-card .task-description {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.task-card .task-deadline {
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0;
+}
+
+.task-card .task-privacy {
+  font-size: 0.85rem;
+  color: #007bff; /* Ou cor diferente para público/privado */
+  margin-top: 5px;
+}
+
+.task-card input[type="checkbox"] {
+  width: auto; /* Para não ocupar 100% da largura */
+  margin-right: 10px; /* Espaço entre checkbox e título */
+  cursor: pointer;
+  transform: scale(1.2); /* Aumenta um pouco o checkbox */
+}
+
+.task-card .task-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Espaço entre os botões de ação */
+}
+
+.task-card .task-actions button {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
